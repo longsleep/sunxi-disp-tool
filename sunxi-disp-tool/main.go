@@ -12,23 +12,46 @@ import (
 	"github.com/longsleep/sunxi-disp-tool/disp2"
 )
 
+func usage() {
+	fmt.Println("Usage: sunxi-disp-tool <command> [<args>]")
+	fmt.Println("Available commands are:")
+	fmt.Println("  switch   Switch HDMI output mode")
+}
+
 func main() {
+	switchCommand := flag.NewFlagSet("switch", flag.ExitOnError)
+	outputMode := switchCommand.Int("mode", disp2.DISP_TV_MOD_1080P_60HZ, "HDMI output mode")
+
+	if len(os.Args) == 1 {
+		usage()
+		return
+	}
+
+	switch os.Args[1] {
+	case "switch":
+		switchCommand.Parse(os.Args[2:])
+	case "-h":
+		usage()
+		return
+	default:
+		fmt.Printf("%q is not valid command.\n", os.Args[1])
+		os.Exit(1)
+	}
+
 	disp, err := disp2.New()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(2)
 
 	}
 	defer disp.Close()
 
-	// Parse commandline parameters.
-	outputMode := flag.Int("mode", disp2.DISP_TV_MOD_1080P_60HZ, "HDMI output mode")
-	flag.Parse()
+	if switchCommand.Parsed() {
+		err = disp.Switch(0, disp2.DISP_OUTPUT_TYPE_HDMI, uint64(*outputMode))
+	}
 
-	// For now only support switch command on first display as HDMI.
-	err = disp.Switch(0, disp2.DISP_OUTPUT_TYPE_HDMI, uint64(*outputMode))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(2)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(3)
 	}
 }
