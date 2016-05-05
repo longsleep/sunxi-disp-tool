@@ -35,4 +35,43 @@ const (
 	DISP_TV_MOD_3840_2160P_25HZ  = 0x1d
 	DISP_TV_MOD_3840_2160P_24HZ  = 0x1e
 	DISP_TV_MODE_NUM             = 0x1f
+
+	DISP_TV_MODE_UNKOWN = 0xffff
 )
+
+func GetTVModFromString(args ...string) int {
+	for _, arg := range args {
+		switch arg {
+		case "EDID":
+			// Not implemented yet.
+		case "720p50":
+			return DISP_TV_MOD_720P_50HZ
+		case "720p":
+			fallthrough
+		case "720p60":
+			return DISP_TV_MOD_720P_60HZ
+		case "1080i50":
+			return DISP_TV_MOD_1080I_50HZ
+		case "1080i":
+			fallthrough
+		case "1080i60":
+			return DISP_TV_MOD_1080I_60HZ
+		case "1080p24":
+			return DISP_TV_MOD_1080P_24HZ
+		case "1080p50":
+			return DISP_TV_MOD_1080P_50HZ
+		case "1080p":
+			fallthrough
+		case "1080p60":
+			return DISP_TV_MOD_1080P_60HZ
+		case "2160p30":
+			return DISP_TV_MOD_3840_2160P_30HZ
+		case "2160p25":
+			return DISP_TV_MOD_3840_2160P_25HZ
+		case "2160p24":
+			return DISP_TV_MOD_3840_2160P_24HZ
+		}
+	}
+
+	return DISP_TV_MODE_UNKOWN
+}

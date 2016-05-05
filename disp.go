@@ -7,4 +7,5 @@ package disp
 import (
 	_ "github.com/longsleep/sunxi-disp-tool/disp2"
 	_ "github.com/longsleep/sunxi-disp-tool/fb"
+	_ "github.com/longsleep/sunxi-disp-tool/kernel"
 )
