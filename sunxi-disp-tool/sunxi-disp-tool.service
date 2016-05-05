@@ -1,0 +1,10 @@
+[Unit]
+Description=Init Sunxi disp2 HDMI output mode
+
+[Service]
+ExecStart=/usr/local/sbin/sunxi-disp-tool init
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sysinit.target
