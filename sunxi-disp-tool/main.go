@@ -13,6 +13,11 @@
 	DISP_FB_RELEASE = 0x281
 	DISP_ENHANCE_ENABLE = 0x180,
 	DISP_ENHANCE_DISABLE = 0x181,
+
+	The original disp2 framebuffer driver is fucked up and needs a patch like
+	https://github.com/jernejsk/OpenELEC-OPi2/blob/openelec-7.0/projects/H3/patches/linux/linux-79-fbdev-fixes.patch
+	to properly display after resolution change. Thanks to Jernej Škrabec for
+	pointing me to it.
 */
 
 package main
