@@ -3,16 +3,8 @@
 // license that can be found in the LICENSE file.
 
 /*
-	Based on information from the A64 BSP 1.2 Linux kernel source.
-
-	DISP_print = 0xffff
-	DISP_GET_OUTPUT_TYPE = 0x09,
-	DISP_DEVICE_SWITCH = 0x0F,
-	DISP_SET_COLOR_RANGE = 0x11,
-	DISP_GET_COLOR_RANGE = 0x12,
-	DISP_FB_RELEASE = 0x281
-	DISP_ENHANCE_ENABLE = 0x180,
-	DISP_ENHANCE_DISABLE = 0x181,
+	This implementation is based on information from the A64 BSP 1.2 Linux
+	kernel source.
 
 	The original disp2 framebuffer driver is fucked up and needs a patch like
 	https://github.com/jernejsk/OpenELEC-OPi2/blob/openelec-7.0/projects/H3/patches/linux/linux-79-fbdev-fixes.patch
@@ -28,6 +20,8 @@ import (
 	"os"
 	"syscall"
 	"unsafe"
+
+	"github.com/longsleep/sunxi-disp-tool/disp2"
 )
 
 const (
@@ -60,9 +54,9 @@ func (disp *Disp) ioctl(cmd uint32, args *Args) (uintptr, uintptr, syscall.Errno
 }
 
 func (disp *Disp) Switch(screen int, outputType uint64, outputMode uint64) error {
-	r1, r2, errno := disp.ioctl(0x0f, &Args{uint64(screen), outputType, outputMode, 0})
+	r1, r2, errno := disp.ioctl(disp2.DISP_DEVICE_SWITCH, &Args{uint64(screen), outputType, outputMode})
 	if errno != 0 {
-		fmt.Println("error: switch", errno, r1, r2)
+		fmt.Fprintf(os.Stderr, "error: switch %v %v %v\n", errno, r1, r2)
 		return errno
 	}
 
@@ -79,11 +73,11 @@ func main() {
 	defer disp.Close()
 
 	// Parse commandline parameters.
-	outputMode := flag.Int("mode", 10, "HDMI output mode")
+	outputMode := flag.Int("mode", disp2.DISP_TV_MOD_1080P_60HZ, "HDMI output mode")
 	flag.Parse()
 
 	// For now only support switch command on first display as HDMI.
-	err = disp.Switch(0, 4, uint64(*outputMode))
+	err = disp.Switch(0, disp2.DISP_OUTPUT_TYPE_HDMI, uint64(*outputMode))
 	if err != nil {
 		os.Exit(2)
 	}
