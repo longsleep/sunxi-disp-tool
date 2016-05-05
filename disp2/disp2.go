@@ -72,6 +72,22 @@ func (disp *Disp2) Switch(screen int, outputType uint64, outputMode uint64) erro
 		return fmt.Errorf("width or height is zero")
 	}
 
+	disp.Blank(screen, false)
+
+	return nil
+}
+
+func (disp *Disp2) Blank(screen int, blank bool) error {
+	var b uint64
+	if blank {
+		b = 1
+	}
+
+	_, _, errno := disp.ioctl(DISP_BLANK, &ioArgs{uint64(screen), b})
+	if errno != 0 {
+		return fmt.Errorf("ioctl blank failed %v", errno)
+	}
+
 	return nil
 }
 
