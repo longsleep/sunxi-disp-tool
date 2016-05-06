@@ -5,6 +5,10 @@ is organized in Go modules, so it can easily be integrated.
 
 ## Usage
 
+Make sure to stop any graphical UI before running this command to make sure
+that the existing framebuffer can be properly freed and reassigned. Failing
+this will result in wrong framebuffer size and thus garbled display.
+
 ```
 Usage: sunxi-disp-tool [<global-options>] <command> [<args>]
 Global options:
