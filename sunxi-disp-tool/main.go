@@ -15,13 +15,19 @@ import (
 )
 
 func usage() {
-	fmt.Println("Usage: sunxi-disp-tool <command> [<args>]")
+	fmt.Println("Usage: sunxi-disp-tool [<global-options>] <command> [<args>]")
+	fmt.Println("Global options:")
+	fmt.Println("  -screen int")
+	fmt.Println("          Screen ID (default 0)")
 	fmt.Println("Available commands are:")
 	fmt.Println("  switch   Switch HDMI output mode")
 	fmt.Println("  init     Initialize HDMI output mode from Kernel args")
 }
 
 func main() {
+	globalOptions := flag.NewFlagSet("global", flag.ContinueOnError)
+	screenID := globalOptions.Int("screen", 0, "Screen ID")
+
 	switchCommand := flag.NewFlagSet("switch", flag.ExitOnError)
 	outputMode := switchCommand.Int("mode", disp2.DISP_TV_MOD_1080P_60HZ, "HDMI output mode")
 
@@ -29,21 +35,24 @@ func main() {
 	initKernelArg := initCommand.String("kernelarg", "disp.screen0_output_mode", "HDMI output Kernel arg name")
 	initDefaultOutputMode := initCommand.Int("mode", disp2.DISP_TV_MOD_1080P_60HZ, "HDMI output mode default")
 
-	if len(os.Args) == 1 {
+	globalOptions.Parse(os.Args[1:])
+	args := globalOptions.Args()
+
+	if len(args) == 0 {
 		usage()
 		return
 	}
 
-	switch os.Args[1] {
+	switch args[0] {
 	case "switch":
-		switchCommand.Parse(os.Args[2:])
+		switchCommand.Parse(args[1:])
 	case "init":
-		initCommand.Parse(os.Args[2:])
+		initCommand.Parse(args[1:])
 	case "-h":
 		usage()
 		return
 	default:
-		fmt.Printf("%q is not valid command.\n", os.Args[1])
+		fmt.Printf("%q is not valid command.\n", args[0])
 		os.Exit(1)
 	}
 
@@ -56,7 +65,7 @@ func main() {
 	defer disp.Close()
 
 	if switchCommand.Parsed() {
-		err = disp.Switch(0, disp2.DISP_OUTPUT_TYPE_HDMI, uint64(*outputMode))
+		err = disp.Switch(*screenID, disp2.DISP_OUTPUT_TYPE_HDMI, uint64(*outputMode))
 	} else if initCommand.Parsed() {
 		if *initKernelArg != "" {
 			boot, ok := kernel.GetCmdlineParamValue(*initKernelArg)
@@ -69,7 +78,7 @@ func main() {
 			}
 		}
 
-		err = disp.Switch(0, disp2.DISP_OUTPUT_TYPE_HDMI, uint64(*initDefaultOutputMode))
+		err = disp.Switch(*screenID, disp2.DISP_OUTPUT_TYPE_HDMI, uint64(*initDefaultOutputMode))
 	}
 
 	if err != nil {
