@@ -51,7 +51,7 @@ the `-name` parameter of the `switch` command or via Kernel argument using the
 ```
 
 The values without a frequency all map to the highest supported frequency for
-the selected vertical solution. The parse also supports formats like
+the selected vertical solution. The parser also supports formats like
 `1280x720p` and splits every value by `x` to be consistent with other existing
 Sunxi documentation.
 

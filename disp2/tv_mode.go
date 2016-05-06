@@ -73,6 +73,8 @@ func GetTVModFromString(args ...string) int {
 			fallthrough
 		case "1080p60":
 			return DISP_TV_MOD_1080P_60HZ
+		case "2160p":
+			fallthrough
 		case "2160p30":
 			return DISP_TV_MOD_3840_2160P_30HZ
 		case "2160p25":
