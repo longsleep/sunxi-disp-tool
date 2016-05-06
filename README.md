@@ -49,8 +49,8 @@ by adding it to `/etc/rc.local`.
 Everything is automatic for Ubuntu Xenial 16.04 arm64 via my Pine64 PPA at
 https://launchpad.net/~longsleep/+archive/ubuntu/ubuntu-pine64-flavour-makers
 
-So on Xenial do something like the following, to get install the tool and
-it will automatically run on boot.
+So on Xenial do something like the following, to install the tool and to have
+it run automatically on boot.
 
 ```bash
 sudo apt-add-repository ppa:longsleep/ubuntu-pine64-flavour-makers
