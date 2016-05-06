@@ -30,6 +30,37 @@ sunxi-disp-tool switch -name 1080p
 sunxi-disp-tool switch -name 1020x720p60
 ```
 
+### Run automatically on boot
+
+On boards like the Pine64 with `uEnv.txt` support simply add a line to provide
+additional Kernel arguments.
+
+```bash
+cat <<EOF | sudo tee -a /boot/uEnv.txt
+optargs=disp.screen0_output_mode=720p60
+EOF
+```
+
+You can use any of the defined known HDMI output name (see below).
+
+After doing this, just run `sunxi-disp-tool init` somewhere during boot, eg.
+by adding it to `/etc/rc.local`.
+
+Everything is automatic for Ubuntu Xenial 16.04 arm64 via my Pine64 PPA at
+https://launchpad.net/~longsleep/+archive/ubuntu/ubuntu-pine64-flavour-makers
+
+So on Xenial do something like the following, to get install the tool and
+it will automatically run on boot.
+
+```bash
+sudo apt-add-repository ppa:longsleep/ubuntu-pine64-flavour-makers
+sudo apt-get update && sudo apt-get install sunxi-disp-tool
+```
+
+For other distributions, get the systemd service file from the `debian` folder
+and place it into `/etc/systemd/system`. Do not forget to enable it with
+`systemctl enable sunxi-disp-tool`.
+
 
 ## Available HDMI output names
 
