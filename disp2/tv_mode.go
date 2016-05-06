@@ -4,6 +4,10 @@
 
 package disp2
 
+import (
+	"strings"
+)
+
 // All display output modes i could find. Actual support for those depend on
 // the chip and the driver in the Kernel tree in use.
 const (
@@ -41,7 +45,12 @@ const (
 
 func GetTVModFromString(args ...string) int {
 	for _, arg := range args {
-		switch arg {
+		value := arg
+		widthXheight := strings.SplitN(arg, "x", 2)
+		if len(widthXheight) == 2 {
+			value = widthXheight[1]
+		}
+		switch value {
 		case "EDID":
 			// Not implemented yet.
 		case "720p50":

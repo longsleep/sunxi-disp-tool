@@ -3,12 +3,58 @@
 This utility allows to control a sunxi disp2 device from user space. The code
 is organized in Go modules, so it can easily be integrated.
 
-## Usage examples
+## Usage
+
+```
+Usage: sunxi-disp-tool [<global-options>] <command> [<args>]
+Global options:
+  -screen int
+          Screen ID (default 0)
+Available commands are:
+  switch   Switch HDMI output mode
+  init     Initialize HDMI output mode from Kernel args
+
+```
+
+### Examples
 
 ```bash
 sunxi-disp-tool switch -mode 0xa
 sunxi-disp-tool switch -mode 0x5
+sunxi-disp-tool switch -name 720p
+sunxi-disp-tool switch -name 1080p
+sunxi-disp-tool switch -name 1020x720p60
 ```
+
+
+## Available HDMI output names
+
+The following names are supported by this tool, and are mapped to there
+corresponding output mode number values. These names can either be passed with
+the `-name` parameter of the `switch` command or via Kernel argument using the
+`init` command.
+
+```
+720p50
+720p60
+720p
+1080i50
+1080i60
+1080p24
+1080p50
+1080p60
+1080p
+2160p24
+2160p25
+2160p30
+2160p
+```
+
+The values without a frequency all map to the highest supported frequency for
+the selected vertical solution. The parse also supports formats like
+`1280x720p` and splits every value by `x` to be consistent with other existing
+Sunxi documentation.
+
 
 ## Available HDMI output modes (-mode parameter of `switch` command)
 
