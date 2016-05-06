@@ -79,7 +79,7 @@ func main() {
 			boot, ok := kernel.GetCmdlineParamValue(*initKernelArg)
 			if ok {
 				resolutions := strings.Split(boot, ":")
-				mode := disp2.GetTVModFromString(resolutions...)
+				mode = disp2.GetTVModFromString(resolutions...)
 				if mode == disp2.DISP_TV_MODE_UNKOWN {
 					// No or invalid mode set via kerne parameter. Do nothing.
 					return
