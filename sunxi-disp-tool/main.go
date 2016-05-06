@@ -34,7 +34,6 @@ func main() {
 
 	initCommand := flag.NewFlagSet("init", flag.ExitOnError)
 	initKernelArg := initCommand.String("kernelarg", "disp.screen0_output_mode", "Set HDMI output mode from Kernel arg")
-	initDefaultOutputMode := initCommand.Int("mode", disp2.DISP_TV_MOD_1080P_60HZ, "HDMI output mode default value")
 
 	globalOptions.Parse(os.Args[1:])
 	args := globalOptions.Args()
@@ -75,18 +74,20 @@ func main() {
 
 		err = disp.Switch(*screenID, disp2.DISP_OUTPUT_TYPE_HDMI, uint64(*outputMode))
 	} else if initCommand.Parsed() {
+		mode := disp2.DISP_TV_MODE_UNKOWN
 		if *initKernelArg != "" {
 			boot, ok := kernel.GetCmdlineParamValue(*initKernelArg)
 			if ok {
 				resolutions := strings.Split(boot, ":")
 				mode := disp2.GetTVModFromString(resolutions...)
-				if mode != disp2.DISP_TV_MODE_UNKOWN {
-					*initDefaultOutputMode = mode
+				if mode == disp2.DISP_TV_MODE_UNKOWN {
+					// No or invalid mode set via kerne parameter. Do nothing.
+					return
 				}
 			}
 		}
 
-		err = disp.Switch(*screenID, disp2.DISP_OUTPUT_TYPE_HDMI, uint64(*initDefaultOutputMode))
+		err = disp.Switch(*screenID, disp2.DISP_OUTPUT_TYPE_HDMI, uint64(mode))
 	}
 
 	if err != nil {
