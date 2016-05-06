@@ -1,4 +1,4 @@
-sunxi-disp-tool (0.0.3) trusty; urgency=medium
+sunxi-disp-tool (0.0.4) xenial; urgency=medium
 
   * Fix init command so it actually works.
 
