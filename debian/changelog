@@ -1,0 +1,5 @@
+sunxi-disp-tool (0.0.1) xenial; urgency=medium
+
+  * Initial release.
+
+ -- Simon Eisenmann <simon@longsleep.org>  Fri, 6 May 2016 20:28:24 +0200

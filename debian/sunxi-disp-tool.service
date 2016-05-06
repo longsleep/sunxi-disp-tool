@@ -1,0 +1,14 @@
+[Unit]
+Description=Initialize Sunxi disp2 HDMI output mode
+DefaultDependencies=no
+Before=sysinit.target
+ConditionPathIsReadWrite=/sys
+ConditionPathExists=/dev/disp
+
+[Service]
+ExecStart=/usr/bin/sunxi-disp-tool init
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sysinit.target

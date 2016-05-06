@@ -1,0 +1,24 @@
+Source: sunxi-disp-tool
+Section: kernel
+Priority: optional
+Maintainer: Simon Eisenmann <simon@longsleep.org>
+Build-Depends: debhelper (>= 9),
+ dh-golang,
+ golang-go (>= 1.2.0)
+Standards-Version: 3.9.7
+
+Package: golang-sunxi-disp-tool-dev
+Architecture: all
+Depends: ${misc:Depends}
+Description: Control Sunxi disp2 devices from Go
+ Go development package to control Sunxi disp2 devices
+
+Package: sunxi-disp-tool
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends}
+Description: Command line tool to control Sunxi disp2 devices
+ This package provides a command line user space tool to change
+ settings like resultion of Sunxi disp2 display devices
+
