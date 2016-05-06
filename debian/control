@@ -4,7 +4,8 @@ Priority: optional
 Maintainer: Simon Eisenmann <simon@longsleep.org>
 Build-Depends: debhelper (>= 9),
  dh-golang,
- golang-go (>= 1.2.0)
+ golang-go (>= 1.2.0),
+ dh-systemd
 Standards-Version: 3.9.7
 
 Package: golang-sunxi-disp-tool-dev

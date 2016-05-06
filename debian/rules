@@ -5,4 +5,4 @@ export DH_OPTIONS
 export DH_GOPKG := github.com/longsleep/sunxi-disp-tool
 
 %:
-	dh $@ --buildsystem=golang --with=golang --fail-missing
+	dh $@ --buildsystem=golang --with=golang,systemd --fail-missing
