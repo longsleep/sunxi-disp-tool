@@ -1,3 +1,9 @@
+sunxi-disp-tool (0.0.3) trusty; urgency=medium
+
+  * Fix init command so it actually works.
+
+ -- Simon Eisenmann <simon@longsleep.org>  Fri, 06 May 2016 21:49:53 +0200
+
 sunxi-disp-tool (0.0.2) xenial; urgency=medium
 
   * Ennable systemd service on install.
