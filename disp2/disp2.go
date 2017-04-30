@@ -54,6 +54,14 @@ func (disp *Disp2) ioctl(cmd uint32, args *ioArgs) (uintptr, uintptr, syscall.Er
 }
 
 func (disp *Disp2) Switch(screen int, outputType uint64, outputMode uint64) error {
+	currentOutputType, err := disp.GetOutputType(screen)
+	if err != nil {
+		return err
+	}
+	if currentOutputType != outputType {
+		return fmt.Errorf("screen has wrong output type: %d", currentOutputType)
+	}
+
 	_, _, errno := disp.ioctl(DISP_DEVICE_SWITCH, &ioArgs{uint64(screen), outputType, outputMode})
 	if errno != 0 {
 		return fmt.Errorf("ioctl switch failed %v", errno)
@@ -107,6 +115,15 @@ func (disp *Disp2) GetScnWidth(screen int) (uint32, error) {
 	}
 
 	return uint32(r1), nil
+}
+
+func (disp *Disp2) GetOutputType(screen int) (uint64, error) {
+	r1, _, errno := disp.ioctl(DISP_GET_OUTPUT_TYPE, &ioArgs{uint64(screen)})
+	if errno != 0 {
+		return 0, fmt.Errorf("ioctl get_output_type failed %v", errno)
+	}
+
+	return uint64(r1), nil
 }
 
 func (disp *Disp2) fbSet(screen int, width, height uint32) error {

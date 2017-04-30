@@ -64,6 +64,19 @@ func main() {
 	}
 	defer disp.Close()
 
+	// Read screen output type.
+	outputType, err := disp.GetOutputType(*screenID)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(3)
+	}
+
+	// Only support HDMI for now.
+	if outputType != disp2.DISP_OUTPUT_TYPE_HDMI {
+		fmt.Fprintf(os.Stderr, "Screen is not HDMI - doing nothing.\n")
+		return
+	}
+
 	if switchCommand.Parsed() {
 		if *outputModeName != "" {
 			mode := disp2.GetTVModFromString(*outputModeName)
@@ -72,7 +85,7 @@ func main() {
 			}
 		}
 
-		err = disp.Switch(*screenID, disp2.DISP_OUTPUT_TYPE_HDMI, uint64(*outputMode))
+		err = disp.Switch(*screenID, outputType, uint64(*outputMode))
 	} else if initCommand.Parsed() {
 		mode := disp2.DISP_TV_MODE_UNKOWN
 		if *initKernelArg != "" {
@@ -80,14 +93,15 @@ func main() {
 			if ok {
 				resolutions := strings.Split(boot, ":")
 				mode = disp2.GetTVModFromString(resolutions...)
-				if mode == disp2.DISP_TV_MODE_UNKOWN {
-					// No or invalid mode set via kerne parameter. Do nothing.
-					return
-				}
 			}
 		}
 
-		err = disp.Switch(*screenID, disp2.DISP_OUTPUT_TYPE_HDMI, uint64(mode))
+		if mode == disp2.DISP_TV_MODE_UNKOWN {
+			// No or invalid mode set via kernel parameter. Do nothing.
+			return
+		}
+
+		err = disp.Switch(*screenID, outputType, uint64(mode))
 	}
 
 	if err != nil {
