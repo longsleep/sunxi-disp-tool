@@ -1,3 +1,9 @@
+sunxi-disp-tool (0.0.5) xenial; urgency=medium
+
+  * Ignore all screens which are not HDMI
+
+ -- Simon Eisenmann <simon@longsleep.org>  Sun, 30 Apr 2017 22:35:24 +0200
+
 sunxi-disp-tool (0.0.4) xenial; urgency=medium
 
   * Fix init command so it actually works.
